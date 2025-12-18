@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Certificate Verification | Zero To Analyst Institute</title>
+
+  <!-- Optional icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root{
+      --bg:#f5f5f5; --card:#fff; --text:#111; --muted:#555; --border:#e5e5e5;
+      --shadow:0 12px 30px rgba(0,0,0,.08);
+      --btn:#111; --btnText:#fff; --pillBg:rgba(0,0,0,.06);
+      --ok:#0a7a2f; --bad:#b00020;
+    }
+    body.dark{
+      --bg:#060606; --card:#0f0f0f; --text:#f5f5f5; --muted:#bdbdbd; --border:#2a2a2a;
+      --shadow:0 14px 42px rgba(0,0,0,.55);
+      --btn:#f5f5f5; --btnText:#000; --pillBg:rgba(255,255,255,.08);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+    body{background:var(--bg);color:var(--text);min-height:100vh}
+    .topbar{
+      position:sticky;top:0;z-index:20;
+      backdrop-filter:blur(10px);
+      background:color-mix(in srgb, var(--bg) 80%, transparent);
+      border-bottom:1px solid var(--border);
+      padding:.9rem 1.2rem;
+      display:flex;align-items:center;justify-content:space-between;gap:1rem;
+    }
+    .brand{display:flex;align-items:center;gap:.8rem;min-width:0}
+    .brand-mark{
+      width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+      background:var(--text);color:var(--bg);font-weight:800;letter-spacing:.08em;flex:0 0 auto;
+    }
+    .brand-name{font-weight:800;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .brand-sub{font-size:.9rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .topbar-actions{display:flex;align-items:center;gap:.6rem;flex-wrap:nowrap}
+    .pill{
+      border:1px solid var(--border);background:var(--pillBg);color:var(--text);
+      padding:.5rem .8rem;border-radius:999px;text-decoration:none;
+      display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;white-space:nowrap;
+      transition:transform .2s ease,opacity .2s ease;
+    }
+    .pill.outline{background:transparent}
+    .pill:hover{transform:translateY(-1px);opacity:.92}
+    .wrap{max-width:860px;margin:0 auto;padding:2rem 1.2rem 3rem}
+    .card{
+      background:var(--card);border:1px solid var(--border);border-radius:16px;
+      box-shadow:var(--shadow);padding:1.6rem;
+    }
+    .card-head h1{font-size:clamp(1.4rem,2.6vw,2rem);letter-spacing:.02em;margin-bottom:.35rem}
+    .card-head p{color:var(--muted);font-size:.98rem}
+    .divider{height:1px;background:var(--border);margin:1.2rem 0}
+    .result{display:grid;gap:.8rem;text-align:left}
+    .badge{display:inline-flex;align-items:center;gap:.5rem;font-weight:800;letter-spacing:.02em}
+    .badge.ok{color:var(--ok)} .badge.bad{color:var(--bad)}
+    .grid{display:grid;grid-template-columns:180px 1fr;gap:.7rem 1rem}
+    @media(max-width:560px){.grid{grid-template-columns:1fr}}
+    .k{color:var(--muted);font-weight:700;font-size:.92rem}
+    .v{font-weight:650;word-break:break-word}
+    .actions{display:flex;gap:.7rem;flex-wrap:wrap}
+    .btn{
+      border:1px solid transparent;background:var(--btn);color:var(--btnText);
+      border-radius:999px;padding:.75rem 1.1rem;font-weight:750;letter-spacing:.02em;text-decoration:none;
+      display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;
+      transition:transform .2s ease,opacity .2s ease;
+    }
+    .btn.outline{background:transparent;border-color:var(--border);color:var(--text)}
+    .btn:hover{transform:translateY(-1px);opacity:.92}
+    .hint{margin-top:1rem;color:var(--muted);font-size:.93rem}
+    .contact-row{margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap}
+    .contact-pill{
+      border:1px solid var(--border);border-radius:999px;padding:.55rem .9rem;text-decoration:none;
+      color:var(--text);display:inline-flex;align-items:center;gap:.55rem;background:transparent;
+      transition:transform .2s ease,opacity .2s ease;
+    }
+    .contact-pill:hover{transform:translateY(-1px);opacity:.92}
+    .footer{
+      margin-top:1.5rem;color:var(--muted);display:flex;justify-content:space-between;gap:.8rem;flex-wrap:wrap;
+      font-size:.9rem;
+    }
+    .footer a{color:inherit;text-decoration:none;border-bottom:1px dotted color-mix(in srgb, var(--muted) 60%, transparent)}
+    .footer a:hover{opacity:.85}
+    .dot{padding:0 .4rem}
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">ZTA</div>
+      <div>
+        <div class="brand-name">Zero To Analyst Institute</div>
+        <div class="brand-sub">Certificate Verification</div>
+      </div>
+    </div>
+
+    <div class="topbar-actions">
+      <button id="themeToggle" class="pill" type="button" aria-label="Toggle theme">
+        <i class="fa-solid fa-moon"></i><span>Theme</span>
+      </button>
+      <a class="pill outline" href="https://www.zerotoanalystinstitute.site" target="_blank" rel="noopener">
+        Visit Website
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <div class="card-head">
+        <h1 id="pageTitle">Checking certificate…</h1>
+        <p id="pageSubtitle">Please wait a moment.</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <div id="resultArea" class="result"></div>
+
+      <div class="divider"></div>
+
+      <div class="actions">
+        <a id="openPdfBtn" class="btn" href="#" target="_blank" rel="noopener" style="display:none;">
+          <i class="fa-regular fa-file-pdf"></i> View Certificate PDF
+        </a>
+
+        <button id="copyLinkBtn" class="btn outline" type="button">
+          <i class="fa-regular fa-copy"></i> Copy Verification Link
+        </button>
+      </div>
+
+      <p class="hint">If you believe this is an error, please contact us.</p>
+
+      <div class="contact-row">
+        <a class="contact-pill" href="https://m.me/61583111326487" target="_blank" rel="noopener">
+          <i class="fa-brands fa-facebook-messenger"></i> Messenger
+        </a>
+        <a class="contact-pill" href="mailto:zta.myanmar.edu@gmail.com">
+          <i class="fa-regular fa-envelope"></i> Email
+        </a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div>© <span id="year"></span> Zero To Analyst Institute</div>
+      <div>
+        <a href="https://www.zerotoanalystinstitute.site" target="_blank" rel="noopener">Official Site</a>
+        <span class="dot">•</span>
+        <a href="https://www.linkedin.com/company/zero-to-analyst-institute/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // ==========================================================
+    // STEP 1) ADD YOUR STUDENTS HERE (3 EXAMPLE PEOPLE)
+    // Key = Certificate ID (must match QR id exactly)
+    // ==========================================================
+    const CERTIFICATES = {
+      "ZTA-2025-001": {
+        student_name: "Aung Aung",
+        course: "8 Days Free Data Analyst Bootcamp",
+        issue_date: "2025-12-03",
+        // optional PDF file link (upload PDF to your hosting)
+        pdf_url: "certificates/ZTA-2025-001.jpeg"
+      },
+      "ZTA-2025-002": {
+        student_name: "Su Su Hlaing",
+        course: "Basic Data Analyst",
+        issue_date: "2025-11-20",
+        pdf_url: "certificates/ZTA-2025-002.pdf"
+      },
+      "ZTA-2025-003": {
+        student_name: "Mg Mg",
+        course: "Advanced Data Analyst",
+        issue_date: "2025-10-15",
+        // if you don't have pdf, you can remove this line or keep empty
+        pdf_url: ""
+      }
+    };
+
+    // ==========================================================
+    // STEP 2) HOW FOUND / NOT FOUND WORKS
+    // - It reads ?id= from URL
+    // - It checks CERTIFICATES[id]
+    // - if exists => Verified
+    // - else => Not Found
+    // ==========================================================
+
+    const qs = (s) => document.querySelector(s);
+
+    function getParam(name){
+      const params = new URLSearchParams(window.location.search);
+      return params.get(name);
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function setThemeFromStorage(){
+      const saved = localStorage.getItem("zta_theme");
+      if(saved === "dark") document.body.classList.add("dark");
+    }
+
+    function updateThemeIcon(){
+      const icon = qs("#themeToggle i");
+      if(!icon) return;
+      if(document.body.classList.contains("dark")){
+        icon.classList.remove("fa-moon");
+        icon.classList.add("fa-sun");
+      } else {
+        icon.classList.remove("fa-sun");
+        icon.classList.add("fa-moon");
+      }
+    }
+
+    function toggleTheme(){
+      document.body.classList.toggle("dark");
+      localStorage.setItem("zta_theme", document.body.classList.contains("dark") ? "dark" : "light");
+      updateThemeIcon();
+    }
+
+    function renderVerified(cert, certId){
+      qs("#pageTitle").textContent = "Certificate Verified";
+      qs("#pageSubtitle").textContent = "This certificate is valid and issued by Zero To Analyst Institute.";
+
+      qs("#resultArea").innerHTML = `
+        <div class="badge ok"><i class="fa-solid fa-circle-check"></i> VERIFIED</div>
+
+        <div class="grid">
+          <div class="k">Student Name</div>
+          <div class="v">${escapeHtml(cert.student_name || "-")}</div>
+
+          <div class="k">Course</div>
+          <div class="v">${escapeHtml(cert.course || "-")}</div>
+
+          <div class="k">Certificate ID</div>
+          <div class="v">${escapeHtml(certId)}</div>
+
+          <div class="k">Issue Date</div>
+          <div class="v">${escapeHtml(cert.issue_date || "-")}</div>
+
+          <div class="k">Issued By</div>
+          <div class="v">Zero To Analyst Institute</div>
+        </div>
+      `;
+
+      const openPdfBtn = qs("#openPdfBtn");
+      if(cert.pdf_url && cert.pdf_url.trim() !== ""){
+        openPdfBtn.href = cert.pdf_url;
+        openPdfBtn.style.display = "inline-flex";
+      } else {
+        openPdfBtn.style.display = "none";
+      }
+    }
+
+    function renderNotFound(certId){
+      qs("#pageTitle").textContent = "Certificate Not Found";
+      qs("#pageSubtitle").textContent = "We could not find a record for this certificate ID.";
+
+      qs("#resultArea").innerHTML = `
+        <div class="badge bad"><i class="fa-solid fa-triangle-exclamation"></i> NOT FOUND</div>
+
+        <div class="grid">
+          <div class="k">Requested ID</div>
+          <div class="v">${escapeHtml(certId ? certId : "(missing id parameter)")}</div>
+
+          <div class="k">What to do?</div>
+          <div class="v">Please contact us to verify this certificate.</div>
+        </div>
+      `;
+
+      qs("#openPdfBtn").style.display = "none";
+    }
+
+    async function copyVerificationLink(){
+      const url = window.location.href;
+      try{
+        await navigator.clipboard.writeText(url);
+        qs("#copyLinkBtn").innerHTML = '<i class="fa-solid fa-check"></i> Copied';
+        setTimeout(()=>{
+          qs("#copyLinkBtn").innerHTML = '<i class="fa-regular fa-copy"></i> Copy Verification Link';
+        }, 1400);
+      } catch(e){
+        alert("Copy failed. Please copy this link manually:\n" + url);
+      }
+    }
+
+    // ==========================================================
+    // Init
+    // ==========================================================
+    document.addEventListener("DOMContentLoaded", ()=>{
+      qs("#year").textContent = new Date().getFullYear();
+
+      setThemeFromStorage();
+      updateThemeIcon();
+      qs("#themeToggle").addEventListener("click", toggleTheme);
+      qs("#copyLinkBtn").addEventListener("click", copyVerificationLink);
+
+      // This is the important part:
+      // It reads the certificate id from the URL like:
+      // certificate.html?id=ZTA-2025-001
+      const certId = getParam("id");
+
+      // If QR did not include id, show Not Found (missing id)
+      if(!certId){
+        renderNotFound(null);
+        return;
+      }
+
+      // Check if this id exists in CERTIFICATES list
+      const cert = CERTIFICATES[certId];
+
+      if(cert){
+        // FOUND
+        renderVerified(cert, certId);
+      } else {
+        // NOT FOUND
+        renderNotFound(certId);
+      }
+    });
+  </script>
+</body>
+</html>
