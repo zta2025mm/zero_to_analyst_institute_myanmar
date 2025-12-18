@@ -10,190 +10,357 @@
 
   <style>
     :root{
-      --bg:#f5f5f5; --card:#fff; --text:#111; --muted:#555; --border:#e5e5e5;
+      --bg:#f5f5f5;
+      --card:#ffffff;
+      --text:#111111;
+      --muted:#555555;
+      --border:#e5e5e5;
       --shadow:0 12px 30px rgba(0,0,0,.08);
-      --btn:#111; --btnText:#fff; --pillBg:rgba(0,0,0,.06);
-      --ok:#0a7a2f; --bad:#b00020;
+
+      --nav:#000000;
+      --navText:#ffffff;
+
+      --ok:#0a7a2f;
+      --bad:#b00020;
     }
-    body.dark{
-      --bg:#060606; --card:#0f0f0f; --text:#f5f5f5; --muted:#bdbdbd; --border:#2a2a2a;
-      --shadow:0 14px 42px rgba(0,0,0,.55);
-      --btn:#f5f5f5; --btnText:#000; --pillBg:rgba(255,255,255,.08);
-    }
+
     *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
     body{background:var(--bg);color:var(--text);min-height:100vh}
+
+    /* ===== NAVBAR (BLACK) ===== */
     .topbar{
       position:sticky;top:0;z-index:20;
-      backdrop-filter:blur(10px);
-      background:color-mix(in srgb, var(--bg) 80%, transparent);
-      border-bottom:1px solid var(--border);
-      padding:.9rem 1.2rem;
+      background:var(--nav);
+      color:var(--navText);
+      border-bottom:1px solid rgba(255,255,255,.12);
+      padding:.85rem 1.2rem;
       display:flex;align-items:center;justify-content:space-between;gap:1rem;
     }
-    .brand{display:flex;align-items:center;gap:.8rem;min-width:0}
-    .brand-mark{
-      width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
-      background:var(--text);color:var(--bg);font-weight:800;letter-spacing:.08em;flex:0 0 auto;
+
+    .brand{
+      display:flex;align-items:center;gap:.75rem;min-width:0;
+      text-decoration:none;color:inherit;
     }
-    .brand-name{font-weight:800;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .brand-sub{font-size:.9rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .topbar-actions{display:flex;align-items:center;gap:.6rem;flex-wrap:nowrap}
-    .pill{
-      border:1px solid var(--border);background:var(--pillBg);color:var(--text);
-      padding:.5rem .8rem;border-radius:999px;text-decoration:none;
-      display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;white-space:nowrap;
-      transition:transform .2s ease,opacity .2s ease;
+
+    /* Put your logo here */
+    .brand-logo{
+      width:42px;height:42px;border-radius:10px;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.18);
+      display:flex;align-items:center;justify-content:center;
+      overflow:hidden;flex:0 0 auto;
     }
-    .pill.outline{background:transparent}
-    .pill:hover{transform:translateY(-1px);opacity:.92}
-    .wrap{max-width:860px;margin:0 auto;padding:2rem 1.2rem 3rem}
+    .brand-logo img{
+      width:100%;height:100%;object-fit:contain;display:block;
+      padding:6px; /* adjust if your logo needs more/less space */
+    }
+
+    .brand-text{min-width:0}
+    .brand-name{
+      font-weight:800;letter-spacing:.02em;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      line-height:1.1;
+    }
+    .brand-sub{
+      font-size:.88rem;opacity:.85;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+
+    .nav-actions{
+      display:flex;align-items:center;gap:.6rem;flex-wrap:nowrap;
+    }
+
+    .nav-link{
+      color:#fff;text-decoration:none;
+      font-weight:700;font-size:.9rem;letter-spacing:.02em;
+      padding:.55rem .9rem;border-radius:999px;
+      border:1px solid rgba(255,255,255,.22);
+      background:transparent;
+      transition:transform .2s ease, opacity .2s ease, background .2s ease;
+      white-space:nowrap;
+      display:inline-flex;align-items:center;gap:.5rem;
+    }
+    .nav-link:hover{
+      transform:translateY(-1px);
+      opacity:.92;
+      background:rgba(255,255,255,.08);
+    }
+
+    /* ===== PAGE ===== */
+    .wrap{max-width:980px;margin:0 auto;padding:2rem 1.2rem 3rem}
+
+    .layout{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
     .card{
-      background:var(--card);border:1px solid var(--border);border-radius:16px;
-      box-shadow:var(--shadow);padding:1.6rem;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      padding:1.4rem;
     }
-    .card-head h1{font-size:clamp(1.4rem,2.6vw,2rem);letter-spacing:.02em;margin-bottom:.35rem}
-    .card-head p{color:var(--muted);font-size:.98rem}
-    .divider{height:1px;background:var(--border);margin:1.2rem 0}
-    .result{display:grid;gap:.8rem;text-align:left}
-    .badge{display:inline-flex;align-items:center;gap:.5rem;font-weight:800;letter-spacing:.02em}
-    .badge.ok{color:var(--ok)} .badge.bad{color:var(--bad)}
-    .grid{display:grid;grid-template-columns:180px 1fr;gap:.7rem 1rem}
-    @media(max-width:560px){.grid{grid-template-columns:1fr}}
-    .k{color:var(--muted);font-weight:700;font-size:.92rem}
-    .v{font-weight:650;word-break:break-word}
-    .actions{display:flex;gap:.7rem;flex-wrap:wrap}
-    .btn{
-      border:1px solid transparent;background:var(--btn);color:var(--btnText);
-      border-radius:999px;padding:.75rem 1.1rem;font-weight:750;letter-spacing:.02em;text-decoration:none;
-      display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;
-      transition:transform .2s ease,opacity .2s ease;
+
+    .header-row{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:1rem;
+      flex-wrap:wrap;
     }
-    .btn.outline{background:transparent;border-color:var(--border);color:var(--text)}
-    .btn:hover{transform:translateY(-1px);opacity:.92}
-    .hint{margin-top:1rem;color:var(--muted);font-size:.93rem}
-    .contact-row{margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap}
+
+    .title{
+      font-size:clamp(1.35rem,2.6vw,1.9rem);
+      font-weight:900;
+      letter-spacing:.02em;
+      margin-bottom:.25rem;
+    }
+    .subtitle{
+      color:var(--muted);
+      font-size:.98rem;
+      max-width: 70ch;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:.55rem;
+      font-weight:900;
+      letter-spacing:.02em;
+      padding:.55rem .9rem;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#fff;
+      white-space:nowrap;
+    }
+    .badge.ok{
+      color:var(--ok);
+      border-color: color-mix(in srgb, var(--ok) 30%, var(--border));
+    }
+    .badge.bad{
+      color:var(--bad);
+      border-color: color-mix(in srgb, var(--bad) 30%, var(--border));
+    }
+
+    .divider{height:1px;background:var(--border);margin:1.1rem 0}
+
+    .grid{
+      display:grid;
+      grid-template-columns:180px 1fr;
+      gap:.7rem 1rem;
+      margin-top:.5rem;
+    }
+    @media(max-width:600px){
+      .grid{grid-template-columns:1fr}
+    }
+    .k{color:var(--muted);font-weight:800;font-size:.92rem}
+    .v{font-weight:700;word-break:break-word}
+
+    /* ===== CERTIFICATE PREVIEW (AUTO SHOW) ===== */
+    .preview-wrap{
+      display:grid;
+      gap:.75rem;
+    }
+
+    .preview-title{
+      font-weight:900;
+      letter-spacing:.02em;
+      margin-bottom:.2rem;
+    }
+
+    .certificate-frame{
+      border:1px solid var(--border);
+      border-radius:14px;
+      overflow:hidden;
+      background:#fff;
+      box-shadow:0 10px 24px rgba(0,0,0,.06);
+    }
+
+    /* Image preview */
+    .cert-img{
+      width:100%;
+      height:auto;
+      display:block;
+      max-height: 72vh;
+      object-fit: contain;
+      background:#fff;
+    }
+
+    /* PDF preview */
+    .cert-pdf{
+      width:100%;
+      height:72vh;
+      border:0;
+      display:block;
+      background:#fff;
+    }
+
+    .hint{
+      color:var(--muted);
+      font-size:.92rem;
+      line-height:1.5;
+    }
+
+    .contact-row{
+      display:flex;
+      gap:.6rem;
+      flex-wrap:wrap;
+      margin-top:.4rem;
+    }
     .contact-pill{
-      border:1px solid var(--border);border-radius:999px;padding:.55rem .9rem;text-decoration:none;
-      color:var(--text);display:inline-flex;align-items:center;gap:.55rem;background:transparent;
-      transition:transform .2s ease,opacity .2s ease;
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:.55rem .9rem;
+      text-decoration:none;
+      color:var(--text);
+      display:inline-flex;
+      align-items:center;
+      gap:.55rem;
+      background:transparent;
+      transition:transform .2s ease, opacity .2s ease;
+      font-weight:800;
     }
     .contact-pill:hover{transform:translateY(-1px);opacity:.92}
+
     .footer{
-      margin-top:1.5rem;color:var(--muted);display:flex;justify-content:space-between;gap:.8rem;flex-wrap:wrap;
+      margin-top:1.2rem;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:.8rem;
+      flex-wrap:wrap;
       font-size:.9rem;
+      padding: 0 .2rem;
     }
     .footer a{color:inherit;text-decoration:none;border-bottom:1px dotted color-mix(in srgb, var(--muted) 60%, transparent)}
     .footer a:hover{opacity:.85}
     .dot{padding:0 .4rem}
+
+    /* Small helper note when ID missing */
+    .mini{
+      font-size:.93rem;
+      color:var(--muted);
+      margin-top:.3rem;
+    }
   </style>
 </head>
 
 <body>
+  <!-- BLACK NAVBAR -->
   <header class="topbar">
-    <div class="brand">
-      <div class="brand-mark">ZTA</div>
-      <div>
+    <a class="brand" href="https://www.zerotoanalystinstitute.site" target="_blank" rel="noopener">
+      <div class="brand-logo" aria-label="Zero To Analyst Institute Logo">
+        <!-- ✅ Put your logo file in your repo (same folder as this HTML) -->
+        <!-- Example file name: Logo.webp (you already use it in your main site) -->
+        <img src="Logo.webp" alt="Zero To Analyst Institute" onerror="this.style.display='none'">
+      </div>
+      <div class="brand-text">
         <div class="brand-name">Zero To Analyst Institute</div>
         <div class="brand-sub">Certificate Verification</div>
       </div>
-    </div>
+    </a>
 
-    <div class="topbar-actions">
-      <button id="themeToggle" class="pill" type="button" aria-label="Toggle theme">
-        <i class="fa-solid fa-moon"></i><span>Theme</span>
-      </button>
-      <a class="pill outline" href="https://www.zerotoanalystinstitute.site" target="_blank" rel="noopener">
-        Visit Website
+    <div class="nav-actions">
+      <a class="nav-link" href="https://www.zerotoanalystinstitute.site" target="_blank" rel="noopener">
+        <i class="fa-solid fa-globe"></i> Website
       </a>
     </div>
   </header>
 
   <main class="wrap">
-    <section class="card">
-      <div class="card-head">
-        <h1 id="pageTitle">Checking certificate…</h1>
-        <p id="pageSubtitle">Please wait a moment.</p>
-      </div>
+    <div class="layout">
 
-      <div class="divider"></div>
+      <!-- STATUS + DETAILS -->
+      <section class="card">
+        <div class="header-row">
+          <div>
+            <div class="title" id="pageTitle">Checking certificate…</div>
+            <div class="subtitle" id="pageSubtitle">Loading verification details.</div>
+            <div class="mini" id="miniNote" style="display:none;"></div>
+          </div>
 
-      <div id="resultArea" class="result"></div>
+          <div id="statusBadge" class="badge" style="display:none;"></div>
+        </div>
 
-      <div class="divider"></div>
+        <div class="divider"></div>
 
-      <div class="actions">
-        <a id="openPdfBtn" class="btn" href="#" target="_blank" rel="noopener" style="display:none;">
-          <i class="fa-regular fa-file-pdf"></i> View Certificate PDF
-        </a>
+        <div id="detailsGrid"></div>
 
-        <button id="copyLinkBtn" class="btn outline" type="button">
-          <i class="fa-regular fa-copy"></i> Copy Verification Link
-        </button>
-      </div>
+        <div class="divider"></div>
 
-      <p class="hint">If you believe this is an error, please contact us.</p>
+        <div class="hint">
+          If you believe this is an error, please contact us.
+          <div class="contact-row">
+            <a class="contact-pill" href="https://m.me/61583111326487" target="_blank" rel="noopener">
+              <i class="fa-brands fa-facebook-messenger"></i> Messenger
+            </a>
+            <a class="contact-pill" href="mailto:zta.myanmar.edu@gmail.com">
+              <i class="fa-regular fa-envelope"></i> Email
+            </a>
+          </div>
+        </div>
+      </section>
 
-      <div class="contact-row">
-        <a class="contact-pill" href="https://m.me/61583111326487" target="_blank" rel="noopener">
-          <i class="fa-brands fa-facebook-messenger"></i> Messenger
-        </a>
-        <a class="contact-pill" href="mailto:zta.myanmar.edu@gmail.com">
-          <i class="fa-regular fa-envelope"></i> Email
-        </a>
-      </div>
-    </section>
+      <!-- CERTIFICATE PREVIEW (AUTO SHOW, NO BUTTON) -->
+      <section class="card">
+        <div class="preview-wrap">
+          <div>
+            <div class="preview-title">Certificate Preview</div>
+            <div class="hint">The certificate will appear automatically when the verification is valid.</div>
+          </div>
 
-    <footer class="footer">
-      <div>© <span id="year"></span> Zero To Analyst Institute</div>
-      <div>
-        <a href="https://www.zerotoanalystinstitute.site" target="_blank" rel="noopener">Official Site</a>
-        <span class="dot">•</span>
-        <a href="https://www.linkedin.com/company/zero-to-analyst-institute/" target="_blank" rel="noopener">LinkedIn</a>
-      </div>
-    </footer>
+          <div class="certificate-frame" id="previewFrame">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div>© <span id="year"></span> Zero To Analyst Institute</div>
+        <div>
+          <a href="https://www.zerotoanalystinstitute.site" target="_blank" rel="noopener">Official Site</a>
+          <span class="dot">•</span>
+          <a href="https://www.linkedin.com/company/zero-to-analyst-institute/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </footer>
+
+    </div>
   </main>
 
   <script>
     // ==========================================================
-    // STEP 1) ADD YOUR STUDENTS HERE (3 EXAMPLE PEOPLE)
-    // Key = Certificate ID (must match QR id exactly)
+    // ✅ EDIT ONLY THIS PART FOR NEW STUDENTS
+    // Certificate ID must match the QR link exactly.
+    // You can use image (.jpg/.jpeg/.png/.webp) or pdf.
     // ==========================================================
     const CERTIFICATES = {
       "ZTA-2025-001": {
         student_name: "Aung Aung",
         course: "8 Days Free Data Analyst Bootcamp",
         issue_date: "2025-12-03",
-        // optional PDF file link (upload PDF to your hosting)
-        pdf_url: "certificates/ZTA-2025-001.jpeg"
+        certificate_file: "certificates/ZTA-2025-001.jpeg" // image or pdf
       },
       "ZTA-2025-002": {
         student_name: "Su Su Hlaing",
         course: "Basic Data Analyst",
         issue_date: "2025-11-20",
-        pdf_url: "certificates/ZTA-2025-002.pdf"
+        certificate_file: "certificates/ZTA-2025-002.pdf"
       },
       "ZTA-2025-003": {
         student_name: "Mg Mg",
         course: "Advanced Data Analyst",
         issue_date: "2025-10-15",
-        // if you don't have pdf, you can remove this line or keep empty
-        pdf_url: ""
+        certificate_file: "certificates/ZTA-2025-003.jpeg"
       }
     };
 
-    // ==========================================================
-    // STEP 2) HOW FOUND / NOT FOUND WORKS
-    // - It reads ?id= from URL
-    // - It checks CERTIFICATES[id]
-    // - if exists => Verified
-    // - else => Not Found
-    // ==========================================================
-
+    // ===================== Helpers =====================
     const qs = (s) => document.querySelector(s);
 
     function getParam(name){
-      const params = new URLSearchParams(window.location.search);
-      return params.get(name);
+      return new URLSearchParams(window.location.search).get(name);
     }
 
     function escapeHtml(str){
@@ -205,36 +372,24 @@
         .replaceAll("'","&#039;");
     }
 
-    function setThemeFromStorage(){
-      const saved = localStorage.getItem("zta_theme");
-      if(saved === "dark") document.body.classList.add("dark");
+    function isPdf(path){
+      return /\.pdf(\?|#|$)/i.test(path || "");
     }
 
-    function updateThemeIcon(){
-      const icon = qs("#themeToggle i");
-      if(!icon) return;
-      if(document.body.classList.contains("dark")){
-        icon.classList.remove("fa-moon");
-        icon.classList.add("fa-sun");
+    function renderBadge(ok){
+      const badge = qs("#statusBadge");
+      badge.style.display = "inline-flex";
+      if(ok){
+        badge.className = "badge ok";
+        badge.innerHTML = '<i class="fa-solid fa-circle-check"></i> VERIFIED';
       } else {
-        icon.classList.remove("fa-sun");
-        icon.classList.add("fa-moon");
+        badge.className = "badge bad";
+        badge.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> NOT FOUND';
       }
     }
 
-    function toggleTheme(){
-      document.body.classList.toggle("dark");
-      localStorage.setItem("zta_theme", document.body.classList.contains("dark") ? "dark" : "light");
-      updateThemeIcon();
-    }
-
-    function renderVerified(cert, certId){
-      qs("#pageTitle").textContent = "Certificate Verified";
-      qs("#pageSubtitle").textContent = "This certificate is valid and issued by Zero To Analyst Institute.";
-
-      qs("#resultArea").innerHTML = `
-        <div class="badge ok"><i class="fa-solid fa-circle-check"></i> VERIFIED</div>
-
+    function renderDetails(cert, certId){
+      qs("#detailsGrid").innerHTML = `
         <div class="grid">
           <div class="k">Student Name</div>
           <div class="v">${escapeHtml(cert.student_name || "-")}</div>
@@ -252,76 +407,76 @@
           <div class="v">Zero To Analyst Institute</div>
         </div>
       `;
-
-      const openPdfBtn = qs("#openPdfBtn");
-      if(cert.pdf_url && cert.pdf_url.trim() !== ""){
-        openPdfBtn.href = cert.pdf_url;
-        openPdfBtn.style.display = "inline-flex";
-      } else {
-        openPdfBtn.style.display = "none";
-      }
     }
 
     function renderNotFound(certId){
       qs("#pageTitle").textContent = "Certificate Not Found";
       qs("#pageSubtitle").textContent = "We could not find a record for this certificate ID.";
+      renderBadge(false);
 
-      qs("#resultArea").innerHTML = `
-        <div class="badge bad"><i class="fa-solid fa-triangle-exclamation"></i> NOT FOUND</div>
-
+      const req = certId ? certId : "(missing id parameter)";
+      qs("#detailsGrid").innerHTML = `
         <div class="grid">
           <div class="k">Requested ID</div>
-          <div class="v">${escapeHtml(certId ? certId : "(missing id parameter)")}</div>
+          <div class="v">${escapeHtml(req)}</div>
 
           <div class="k">What to do?</div>
           <div class="v">Please contact us to verify this certificate.</div>
         </div>
       `;
 
-      qs("#openPdfBtn").style.display = "none";
+      // Clear preview
+      qs("#previewFrame").innerHTML = `
+        <div style="padding:1rem;">
+          <div class="hint">No certificate preview available.</div>
+        </div>
+      `;
     }
 
-    async function copyVerificationLink(){
-      const url = window.location.href;
-      try{
-        await navigator.clipboard.writeText(url);
-        qs("#copyLinkBtn").innerHTML = '<i class="fa-solid fa-check"></i> Copied';
-        setTimeout(()=>{
-          qs("#copyLinkBtn").innerHTML = '<i class="fa-regular fa-copy"></i> Copy Verification Link';
-        }, 1400);
-      } catch(e){
-        alert("Copy failed. Please copy this link manually:\n" + url);
+    function renderPreview(filePath){
+      const frame = qs("#previewFrame");
+      if(!filePath || filePath.trim() === ""){
+        frame.innerHTML = `
+          <div style="padding:1rem;">
+            <div class="hint">Certificate file not uploaded yet.</div>
+          </div>
+        `;
+        return;
+      }
+
+      if(isPdf(filePath)){
+        frame.innerHTML = `
+          <iframe class="cert-pdf" src="${escapeHtml(filePath)}"></iframe>
+        `;
+      } else {
+        frame.innerHTML = `
+          <img class="cert-img" src="${escapeHtml(filePath)}" alt="Certificate">
+        `;
       }
     }
 
-    // ==========================================================
-    // Init
-    // ==========================================================
+    // ===================== Init =====================
     document.addEventListener("DOMContentLoaded", ()=>{
       qs("#year").textContent = new Date().getFullYear();
 
-      setThemeFromStorage();
-      updateThemeIcon();
-      qs("#themeToggle").addEventListener("click", toggleTheme);
-      qs("#copyLinkBtn").addEventListener("click", copyVerificationLink);
-
-      // This is the important part:
-      // It reads the certificate id from the URL like:
-      // certificate.html?id=ZTA-2025-001
       const certId = getParam("id");
 
-      // If QR did not include id, show Not Found (missing id)
       if(!certId){
+        qs("#miniNote").style.display = "block";
+        qs("#miniNote").textContent = "Tip: Open with ?id=ZTA-2025-001 (example).";
         renderNotFound(null);
         return;
       }
 
-      // Check if this id exists in CERTIFICATES list
       const cert = CERTIFICATES[certId];
 
       if(cert){
-        // FOUND
-        renderVerified(cert, certId);
+        // FOUND → show verified + details + auto preview
+        qs("#pageTitle").textContent = "Certificate Verified";
+        qs("#pageSubtitle").textContent = "This certificate is valid and issued by Zero To Analyst Institute.";
+        renderBadge(true);
+        renderDetails(cert, certId);
+        renderPreview(cert.certificate_file);
       } else {
         // NOT FOUND
         renderNotFound(certId);
